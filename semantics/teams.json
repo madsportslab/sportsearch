@@ -1,0 +1,28 @@
+{
+  "teams": [
+    {
+      "full": "Atlanta Hawks",
+      "city": "Atlanta",
+      "name": "Hawks",
+      "abv": "ATL",
+      "conf": "East",
+      "div": "Southeast",
+      "id": 1610612737,
+      "nicknames": [
+        
+      ] 
+    },
+    {
+      "full": "Boston Celtics",
+      "city": "Boston",
+      "name": "Celtics",
+      "abv": "BOS",
+      "id": 1610612738,
+      "conf": "East",
+      "div": "Atlantic",
+      "nicknames": [
+        ""
+      ]
+    }
+  ]
+}

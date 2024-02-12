@@ -1,0 +1,35 @@
+{
+  "keywords": {
+    "comparators": [
+      "most",
+      "highest",
+      "greatest",
+      "top",
+      "leading",
+      "leader",
+      "least",
+      "lowest",
+      "worst",
+      "bottom",
+      "trailing",
+      "last place"
+    ],
+    "math": [
+      "average",
+      "mean",
+      "median",
+      "count",
+      "sum",
+      "diff"
+    ],
+    "timeRange": [
+      "from",
+      "to",
+      "last",
+      "today",
+      "season",
+      "career",
+      "rookie"
+    ]
+  }
+}

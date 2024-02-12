@@ -1,0 +1,34 @@
+{
+  "players": [
+    {
+      "first": "Lebron",
+      "last": "James",
+      "short": "L. James",
+      "full": "Lebron James",
+      "id": 2544,
+      "nicknames": [
+        "Bron",
+        "King James",
+        "LBJ"
+      ]
+    },
+    {
+      "first": "Jason",
+      "last": "Tatum",
+      "short": "J. Tatum",
+      "full": "Jason Tatum",
+      "id": 1628369,
+      "nicknames": [
+      ]    
+    },
+    {
+      "first": "Ming",
+      "last": "Yao",
+      "short": "M. Yao",
+      "full": "Ming Yao",
+      "id": 2397,
+      "nicknames": [
+      ]
+    }
+  ]
+}
