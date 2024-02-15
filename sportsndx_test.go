@@ -1,6 +1,7 @@
 package sportsndx
 
 import (
+	"strings"
 	"testing"
 )
 
@@ -9,7 +10,7 @@ func TestInitTeams(t *testing.T) {
 
 	initTeamIndexes()
 
-	_, ok := teamIdxFull["Boston Celtics"]
+	_, ok := idxTeamFull[strings.ToLower("Boston Celtics")]
 
 	if !ok {
 		t.Error("Not found")
@@ -22,7 +23,7 @@ func TestInitPlayers(t *testing.T) {
 
 	initPlayerIndexes()
 
-	_, ok := playerIdxFull["Lebron James"]
+	_, ok := idxPlayerFull[strings.ToLower("Lebron James")]
 
 	if !ok {
 		t.Error("Not found")

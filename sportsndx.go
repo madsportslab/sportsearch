@@ -2,11 +2,12 @@ package sportsndx
 
 import (
 	//"log"
+	"strings"
 )
 
 
 const (
-	APP_NAME            = "Sportsndx"
+	APP_NAME            = "sportsndx"
 	APP_VERSION					= "0.1"
 )
 
@@ -17,9 +18,23 @@ const (
 
 
 const (
+	NOT_FOUND						= -1
+)
+
+
+const (
 	SEMANTICS_DIR       = "semantics"
 	PLAYER_FILE					= "players.json"
 	TEAM_FILE						= "teams.json"
+)
+
+
+const (
+  WHO_TEAM						= 0
+	WHO_PLAYER         	= 1
+	WHO_EAST            = 2
+	WHO_WEST            = 3
+	WHO_NONE            = 4
 )
 
 
@@ -49,16 +64,26 @@ type AllPlayers struct {
 	Players      []Player   `json:"players"`
 }
 
+
+type PlayerNameNode struct {
+	Name					string
+	ID						int
+}
+
+
+// TODO: players that change names like metta world peace
+
+
 var (
-	teamIdxFull						map[string]int
-	teamIdxName						map[string]int
-	teamIdxCity						map[string]int
-	teamIdxAbv						map[string]int
-	playerIdxFull					map[string]int
-	//playerIdxFirst				map[string]int
-	//playerIdxLast					map[string]int
-	playerIdxShort				map[string]int
-	playerIdxNicknames		map[string]int
+	idxTeamFull						map[string]int
+	idxTeamName						map[string]int
+	idxTeamCity						map[string]int
+	idxTeamAbv						map[string]int
+	idxPlayerFull					map[string]int
+	idxPlayerFirst				map[string][]PlayerNameNode
+	idxPlayerLast					map[string][]PlayerNameNode
+	idxPlayerShort				map[string]int
+	idxPlayerNicknames		map[string]int
 )
 
 
@@ -66,10 +91,10 @@ func setTeamMap(teams AllTeams) {
 
 	for _, t := range teams.Teams {
 
-		teamIdxFull[t.Full] 	= t.ID
-		teamIdxName[t.Name] 	= t.ID
-		teamIdxCity[t.City] 	= t.ID
-		teamIdxAbv[t.Abv] 		= t.ID
+		idxTeamFull[strings.ToLower(t.Full)] 	= t.ID
+		idxTeamName[strings.ToLower(t.Name)] 	= t.ID
+		idxTeamCity[strings.ToLower(t.City)] 	= t.ID
+		idxTeamAbv[strings.ToLower(t.Abv)] 		= t.ID
 
 	}
 
@@ -80,11 +105,30 @@ func setPlayerMap(players AllPlayers) {
 
 	for _, p := range players.Players {
 
-		playerIdxFull[p.Full] 	= p.ID
-		playerIdxShort[p.Short] 	= p.ID
+		last 	:= strings.ToLower(p.Last)
+		first := strings.ToLower(p.First)
+		full 	:= strings.ToLower(p.Full)
+		short := strings.ToLower(p.Short)
+
+		idxPlayerFull[full] 		= p.ID
+		idxPlayerShort[short] 	= p.ID
+
+		idxPlayerLast[last] =
+		  append(idxPlayerLast[last],			
+		  PlayerNameNode{
+				Name: first,
+				ID: p.ID,
+			})     
+
+		idxPlayerFirst[first] =
+		  append(idxPlayerFirst[first],
+			PlayerNameNode{
+			  Name: last,
+			  ID: p.ID,
+			})
 
 		for _, n := range p.Nicknames {
-			playerIdxNicknames[n] = p.ID
+			idxPlayerNicknames[strings.ToLower(n)] = p.ID
 		}
 
 	}
@@ -92,12 +136,34 @@ func setPlayerMap(players AllPlayers) {
 } // setPlayerMap
 
 
+func findByName(n string, isLast bool) []PlayerNameNode {
+
+	var idx map[string][]PlayerNameNode
+
+	if len(n) == 0 || n == EMPTY_STRING {
+		return nil
+	}
+
+	if isLast {
+		idx = idxPlayerLast
+	} else {
+		idx = idxPlayerFirst
+	}	
+
+	ln := strings.ToLower(n)
+	
+	return idx[ln]
+
+} // findByName
+
+
 func initPlayerIndexes() {
 
-	playerIdxFull 			= make(map[string]int)
-	//playerIdxLast 			= make(map[string]int)
-	playerIdxShort 			= make(map[string]int)
-	playerIdxNicknames 	= make(map[string]int)
+	idxPlayerFull 			= make(map[string]int)
+	idxPlayerLast 			= make(map[string][]PlayerNameNode)
+	idxPlayerFirst 			= make(map[string][]PlayerNameNode)
+	idxPlayerShort 			= make(map[string]int)
+	idxPlayerNicknames 	= make(map[string]int)
 
 	players := AllPlayers{}
 
@@ -110,10 +176,10 @@ func initPlayerIndexes() {
 
 func initTeamIndexes() {
 
-	teamIdxFull 	= make(map[string]int)
-	teamIdxName 	= make(map[string]int)
-	teamIdxCity 	= make(map[string]int)
-	teamIdxAbv 		= make(map[string]int)
+	idxTeamFull 	= make(map[string]int)
+	idxTeamName 	= make(map[string]int)
+	idxTeamCity 	= make(map[string]int)
+	idxTeamAbv 		= make(map[string]int)
 
 	teams := AllTeams{}
 

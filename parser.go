@@ -1,7 +1,7 @@
 package sportsndx
 
 import (
-	"log"
+	//"log"
   "strings"
 )
 
@@ -27,11 +27,95 @@ type When struct {
 
 
 type Intent struct {
-	Accuracy				float32				`json:"accuracy"`
+  Players					[]int
+	Teams						[]int
+	LastN           int
+	Begin      			string
+	End             string
+	Fields          []string
 }
 
 
-func SemanticParser(q string) *Intent {
+type Classification struct {
+	IsPlayer          bool
+	IsTeam            bool
+	IsKeyword         bool
+	IsParam           bool
+}
+
+
+func CheckPlayer(f string) []PlayerNameNode {
+
+	var ret []PlayerNameNode
+
+	_, ok := idxPlayerFirst[f]
+
+	if ok {
+		
+		node := findByName(f, false)
+
+		ret = make([]PlayerNameNode, len(node))
+
+		copy(ret, node)
+
+	}
+
+	_, ok = idxPlayerLast[f]
+
+	if ok {
+		
+		node := findByName(f, true)
+
+		ret = make([]PlayerNameNode, len(node) + len(ret))
+
+		copy(ret, node)
+
+	}
+
+	return ret
+
+} // CheckPlayer
+
+
+func CheckTeam(f string) int {
+
+	lf := strings.ToLower(f)
+
+	t, ok := idxTeamFull[lf]
+
+	if ok {
+		return t
+	}
+
+	t, ok = idxTeamName[lf]
+
+	if ok {
+		return t
+	}
+
+	t, ok = idxTeamCity[lf]
+
+	if ok {
+		return t
+	}
+
+	t, ok = idxTeamAbv[lf]
+
+	if ok {
+		return t
+	}
+
+	return NOT_FOUND
+
+} // CheckTeam
+
+
+func CheckKeyword(f string) {
+
+} // CheckKeyword
+
+
+func SemanticParser(q string) []Classification {
 
 	if len(q) == 0 || q == EMPTY_STRING {
 		return nil
@@ -39,8 +123,32 @@ func SemanticParser(q string) *Intent {
 
   fields := strings.Fields(q)
 
-	log.Println(fields)
+	var ret []Classification
+	
+	for _, f := range fields {
 
-	return &Intent{}
+		c := Classification{}
+
+		lf := strings.ToLower(f)
+
+		CheckKeyword(lf)
+
+		players := CheckPlayer(lf)
+
+		if len(players) > 0 {
+			c.IsPlayer = true
+		}
+		
+		teamId := CheckTeam(lf)
+		
+		if teamId != NOT_FOUND {
+			c.IsTeam = true
+		}
+
+		ret = append(ret, c)
+
+	}
+
+	return ret
 
 } // SemanticParser

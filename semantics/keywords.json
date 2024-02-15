@@ -29,7 +29,18 @@
       "today",
       "season",
       "career",
-      "rookie"
+      "rookie", 
+      "game"
+    ],
+    "statistics": [
+      "points",
+      "rebounds",
+      "assists",
+      "steals",
+      "blocks",
+      "turnovers",
+      "offensive rebounds",
+      "defensive rebounds"
     ]
   }
 }
