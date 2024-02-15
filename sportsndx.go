@@ -23,7 +23,7 @@ const (
 
 
 const (
-	SEMANTICS_DIR       = "semantics"
+	KEYWORDS_DIR       	= "keywords"
 	PLAYER_FILE					= "players.json"
 	TEAM_FILE						= "teams.json"
 )

@@ -14,7 +14,7 @@ func ReadJson(p string, d interface{}) {
 		return
 	}
 
-	f, err := os.ReadFile(filepath.Join(SEMANTICS_DIR, p))
+	f, err := os.ReadFile(filepath.Join(KEYWORDS_DIR, p))
 
 	if err != nil {
 		log.Println(err)

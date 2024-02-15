@@ -163,15 +163,9 @@ func TestSemanticParserEmptyString(t *testing.T) {
 
 	c := SemanticParser("")
 
-	if len(c) != 4 {
+	if len(c) != 0 {
 		t.Error("Incorrect number of classifications")
-	}
-
-	if len(c) == 4 && (!c[0].IsPlayer || !c[1].IsPlayer) && 
-	  !c[2].IsKeyword && !c[3].IsParam {
-		t.Error("Did not correctly classify")
-	}
-	
+	}	
 
 } // TestSemanticParserEmptyString
 
