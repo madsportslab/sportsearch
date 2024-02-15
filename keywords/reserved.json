@@ -32,7 +32,7 @@
       "rookie", 
       "game"
     ],
-    "statistics": [
+    "fields": [
       "points",
       "rebounds",
       "assists",

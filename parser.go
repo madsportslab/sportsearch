@@ -110,7 +110,11 @@ func CheckTeam(f string) int {
 } // CheckTeam
 
 
-func CheckKeyword(f string) {
+func CheckKeyword(f string) int {
+
+	strings.ToLower(f)
+
+	return 0
 
 } // CheckKeyword
 
@@ -146,6 +150,12 @@ func SemanticParser(q string) []Classification {
 		}
 
 		ret = append(ret, c)
+
+		key := CheckKeyword(lf)
+
+		if key != NOT_FOUND {
+			c.IsKeyword = true
+		}
 
 	}
 

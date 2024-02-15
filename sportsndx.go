@@ -26,6 +26,14 @@ const (
 	KEYWORDS_DIR       	= "keywords"
 	PLAYER_FILE					= "players.json"
 	TEAM_FILE						= "teams.json"
+	RESERVED_FILE       = "reserved.json"
+)
+
+
+const (
+	COMPARATORS					=	"comparators"
+	MATH                = "math"
+	FIELDS              = "fields"
 )
 
 
@@ -71,6 +79,18 @@ type PlayerNameNode struct {
 }
 
 
+type ReservedTypes struct {
+  Comparators    			[]string			`json:"comparators"`
+	Math    						[]string			`json:"math"`
+	Fields    					[]string			`json:"fields"`
+}
+
+
+type AllKeywords struct {
+	Keywords						ReservedTypes		`json:"keywords"`
+}
+
+
 // TODO: players that change names like metta world peace
 
 
@@ -84,6 +104,10 @@ var (
 	idxPlayerLast					map[string][]PlayerNameNode
 	idxPlayerShort				map[string]int
 	idxPlayerNicknames		map[string]int
+	idxKeyComparators   	map[string]int
+	idxKeyMath						map[string]int
+	idxKeyTimeRange				map[string]int
+	idxKeyFields					map[string]int
 )
 
 
@@ -134,6 +158,23 @@ func setPlayerMap(players AllPlayers) {
 	}
 
 } // setPlayerMap
+
+
+func setKeywordMap(keywords AllKeywords) {
+
+	for _, c := range keywords.Keywords.Comparators {
+		idxKeyComparators[strings.ToLower(c)] = 1
+	}
+
+	for _, m := range keywords.Keywords.Math {
+		idxKeyMath[strings.ToLower(m)] = 1
+	}
+
+  for _, f := range keywords.Keywords.Fields {
+		idxKeyFields[strings.ToLower(f)] = 1
+	}
+	
+} // setKeywordMap
 
 
 func findByName(n string, isLast bool) []PlayerNameNode {
@@ -190,9 +231,25 @@ func initTeamIndexes() {
 } // initTeamIndexes
 
 
+func initReservedIndexes() {
+
+	idxKeyComparators		= make(map[string]int)
+	idxKeyMath					= make(map[string]int)
+	idxKeyFields				= make(map[string]int)
+
+	keywords := AllKeywords{}
+
+	ReadJson(RESERVED_FILE, &keywords)
+
+  setKeywordMap(keywords)
+
+} // initReservedIndexes
+
+
 func initKeywords() {
 
 	initTeamIndexes()
 	initPlayerIndexes()
+	initReservedIndexes()
 
 } // initKeywords
