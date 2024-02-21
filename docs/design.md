@@ -67,4 +67,7 @@ first and last names will be duplicated.  use a simple data tree
 structure which is only 1 level deep, this will allow us to search efficiently.
 
 
-## first pass filter should identify each word in the query string without correlation, second pass should associate meaning
+## brainstorm
+
+* first pass filter should identify each word in the query string without correlation, second pass should associate meaning, combining multiple words like first/last name
+* the checks are for exact matches and will not provide a likely match

@@ -12,9 +12,12 @@ func init() {
 
 func TestCheckPlayerUniqueFirst(t *testing.T) {
 
-	c := CheckPlayer("lebron")
+	c := Classification{}
 
-	if c == nil || c[0].ID != 2544 {
+	CheckPlayer("lebron", &c, true)
+	CheckPlayer("lebron", &c, false)
+
+	if !c.IsPlayer || c.Players[0] != 2544 {
 		t.Error("Did not correctly classify player")
 	}
 
@@ -23,9 +26,12 @@ func TestCheckPlayerUniqueFirst(t *testing.T) {
 
 func TestCheckPlayerNonPlayer(t *testing.T) {
 
-	c := CheckPlayer("leb")
+	c := Classification{}
 
-	if c != nil {
+	CheckPlayer("leb", &c, true)
+	CheckPlayer("leb", &c, false)
+
+	if !c.IsPlayer || c.Players[0] != 2544 {
 		t.Error("Did not correctly classify player")
 	}
 
@@ -34,9 +40,12 @@ func TestCheckPlayerNonPlayer(t *testing.T) {
 
 func TestCheckPlayerUniqueLast(t *testing.T) {
 
-	c := CheckPlayer("doncic")
+	c := Classification{}
 
-	if c == nil || c[0].ID != 1629029 {
+	CheckPlayer("doncic", &c, true)
+	CheckPlayer("doncic", &c, false)
+
+	if !c.IsPlayer || c.Players[0] != 1629029 {
 		t.Error("Did not correctly classify player")
 	}
 
@@ -98,9 +107,9 @@ func TestCheckTeamNotExist(t *testing.T) {
 } // TestCheckTeamNotExist
 
 
-func TestSemanticParserSingleWord(t *testing.T) {
+func TestClassifierSingleWord(t *testing.T) {
 
-	c := SemanticParser("lebron")
+	c := Classifier("lebron")
 
 	if len(c) != 1 {
 		t.Error("Incorrect number of classifications")
@@ -110,27 +119,12 @@ func TestSemanticParserSingleWord(t *testing.T) {
 		t.Error("Did not correctly classify as player")
 	}
 
-} // TestSemanticParserSingleWord
+} // TestClassifierSingleWord
 
 
-func TestSemanticParserFirstLast(t *testing.T) {
+func TestClassifierFirstLast(t *testing.T) {
 
-	c := SemanticParser("lebron james")
-
-	if len(c) != 2 {
-		t.Error("Incorrect number of classifications")
-	}
-
-	if len(c) == 2 && !c[0].IsPlayer || !c[1].IsPlayer {
-		t.Error("Did not correctly classify as player")
-	}
-
-} // TestSemanticParserFirstLast
-
-
-func TestSemanticParserLastFirst(t *testing.T) {
-
-	c := SemanticParser("james lebron")
+	c := Classifier("lebron james")
 
 	if len(c) != 2 {
 		t.Error("Incorrect number of classifications")
@@ -140,12 +134,27 @@ func TestSemanticParserLastFirst(t *testing.T) {
 		t.Error("Did not correctly classify as player")
 	}
 
-} // TestSemanticParserLastFirst
+} // TestClassifierFirstLast
 
 
-func TestSemanticParserLast5(t *testing.T) {
+func TestClassifierLastFirst(t *testing.T) {
 
-	c := SemanticParser("lebron james last 5")
+	c := Classifier("james lebron")
+
+	if len(c) != 2 {
+		t.Error("Incorrect number of classifications")
+	}
+
+	if len(c) == 2 && !c[0].IsPlayer || !c[1].IsPlayer {
+		t.Error("Did not correctly classify as player")
+	}
+
+} // TestClassifierLastFirst
+
+
+func TestClassifierLast5(t *testing.T) {
+
+	c := Classifier("lebron james last 5")
 
 	if len(c) != 4 {
 		t.Error("Incorrect number of classifications")
@@ -156,38 +165,38 @@ func TestSemanticParserLast5(t *testing.T) {
 		t.Error("Did not correctly classify")
 	}
 
-} // TestSemanticParserLast5
+} // TestClassifierLast5
 
 
-func TestSemanticParserEmptyString(t *testing.T) {
+func TestClassifierEmptyString(t *testing.T) {
 
-	c := SemanticParser("")
+	c := Classifier("")
 
 	if len(c) != 0 {
 		t.Error("Incorrect number of classifications")
 	}	
 
-} // TestSemanticParserEmptyString
+} // TestClassifierEmptyString
 
 
-func TestSemanticParserCaseSensitivity(t *testing.T) {
+func TestClassifierCaseSensitivity(t *testing.T) {
 
 	initKeywords()
 
-	c := SemanticParser("lebron James")
+	c := Classifier("lebron James")
 
 	if c == nil {
 		t.Error("Returned nil")
 	}
 
-} // TestSemanticParserCaseSensitivity
+} // TestClassifierCaseSensitivity
 
 
-func TestSemanticParserTeamFull(t *testing.T) {
+func TestClassifierTeamFull(t *testing.T) {
 
 	initKeywords()
 
-	c := SemanticParser("boston celtics")
+	c := Classifier("boston celtics")
 
 	if len(c) != 2 {
 		t.Error("Returned incorrect number of classifications")
@@ -197,14 +206,14 @@ func TestSemanticParserTeamFull(t *testing.T) {
 		t.Error("Did not correctly classify as team")
 	}
 
-} // TestSemanticParserTeamFull
+} // TestClassifierTeamFull
 
 
-func TestSemanticParserTeamCity(t *testing.T) {
+func TestClassifierTeamCity(t *testing.T) {
 
 	initKeywords()
 
-	c := SemanticParser("boston")
+	c := Classifier("boston")
 
 	if len(c) != 1 {
 		t.Error("Returned incorrect classification number")
@@ -214,14 +223,14 @@ func TestSemanticParserTeamCity(t *testing.T) {
 		t.Error("Did not correctly classify as team")
 	}
 
-} // TestSemanticParserTeamCity
+} // TestClassifierTeamCity
 
 
-func TestSemanticParserTeamName(t *testing.T) {
+func TestClassifierTeamName(t *testing.T) {
 
 	initKeywords()
 
-	c := SemanticParser("celtics")
+	c := Classifier("celtics")
 
 	if len(c) != 1 {
 		t.Error("Returned incorrect classification number")
@@ -231,14 +240,14 @@ func TestSemanticParserTeamName(t *testing.T) {
 		t.Error("Did not correctly classify as team")
 	}
 
-} // TestSemanticParserTeamName
+} // TestClassifierTeamName
 
 
-func TestSemanticParserTeamAbv(t *testing.T) {
+func TestClassifierTeamAbv(t *testing.T) {
 
 	initKeywords()
 
-	c := SemanticParser("bos")
+	c := Classifier("bos")
 
 	if len(c) != 1 {
 		t.Error("Returned incorrect classification number")
@@ -248,14 +257,14 @@ func TestSemanticParserTeamAbv(t *testing.T) {
 		t.Error("Did not correctly classify as team")
 	}
 
-} // TestSemanticParserTeamAbv
+} // TestClassifierTeamAbv
 
 
-func TestSemanticParserTeamBadAbv(t *testing.T) {
+func TestClassifierTeamBadAbv(t *testing.T) {
 
 	initKeywords()
 
-	c := SemanticParser("bo")
+	c := Classifier("bo")
 
 	if len(c) != 1 {
 		t.Error("Returned incorrect classification number")
@@ -265,4 +274,4 @@ func TestSemanticParserTeamBadAbv(t *testing.T) {
 		t.Error("Classified incorrectly as team")
 	}
 
-} // TestSemanticParserTeamBadAbv
+} // TestClassifierTeamBadAbv

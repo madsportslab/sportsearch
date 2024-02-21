@@ -40,9 +40,10 @@ const (
 const (
   WHO_TEAM						= 0
 	WHO_PLAYER         	= 1
-	WHO_EAST            = 2
-	WHO_WEST            = 3
-	WHO_NONE            = 4
+	WHO_CONF            = 2
+	WHO_DIV            	= 3
+	WHO_ROOKIE         	= 4
+	WHO_NONE            = 5
 )
 
 
@@ -193,7 +194,13 @@ func findByName(n string, isLast bool) []PlayerNameNode {
 
 	ln := strings.ToLower(n)
 	
-	return idx[ln]
+	v, ok := idx[ln]
+
+	if !ok {
+		return nil
+	} else {
+		return v
+	}
 
 } // findByName
 

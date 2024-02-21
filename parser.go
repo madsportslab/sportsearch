@@ -1,7 +1,7 @@
 package sportsndx
 
 import (
-	//"log"
+	"log"
   "strings"
 )
 
@@ -41,38 +41,40 @@ type Classification struct {
 	IsTeam            bool
 	IsKeyword         bool
 	IsParam           bool
+	Players           []int
+	Teams             []int
+	Fields            []string
+	Math              []string
 }
 
 
-func CheckPlayer(f string) []PlayerNameNode {
+func CheckPlayer(f string, c *Classification, isFirst bool) {
 
-	var ret []PlayerNameNode
+	var idx map[string][]PlayerNameNode
 
-	_, ok := idxPlayerFirst[f]
+	if c.Players == nil {
+		c.Players = []int{}
+	}
+
+	if isFirst {
+		idx = idxPlayerFirst
+	} else {
+		idx = idxPlayerLast
+	}
+
+	_, ok := idx[f]
 
 	if ok {
 		
-		node := findByName(f, false)
+		c.IsPlayer = true
 
-		ret = make([]PlayerNameNode, len(node))
+		nodes := findByName(f, false)
 
-		copy(ret, node)
-
-	}
-
-	_, ok = idxPlayerLast[f]
-
-	if ok {
-		
-		node := findByName(f, true)
-
-		ret = make([]PlayerNameNode, len(node) + len(ret))
-
-		copy(ret, node)
+		for _, n := range nodes {
+			c.Players = append(c.Players, n.ID)
+		}
 
 	}
-
-	return ret
 
 } // CheckPlayer
 
@@ -114,12 +116,12 @@ func CheckKeyword(f string) int {
 
 	strings.ToLower(f)
 
-	return 0
+	return NOT_FOUND
 
 } // CheckKeyword
 
 
-func SemanticParser(q string) []Classification {
+func Classifier(q string) []Classification {
 
 	if len(q) == 0 || q == EMPTY_STRING {
 		return nil
@@ -137,11 +139,8 @@ func SemanticParser(q string) []Classification {
 
 		CheckKeyword(lf)
 
-		players := CheckPlayer(lf)
-
-		if len(players) > 0 {
-			c.IsPlayer = true
-		}
+		CheckPlayer(lf, &c, true)
+		CheckPlayer(lf, &c, false)
 		
 		teamId := CheckTeam(lf)
 		
@@ -159,6 +158,8 @@ func SemanticParser(q string) []Classification {
 
 	}
 
+	log.Printf("%v\n", ret)
+
 	return ret
 
-} // SemanticParser
+} // Classifier
