@@ -1,3 +1,3 @@
-module github.com/madsportslab/sportsndx
+module github.com/madsportslab/sportsearch
 
 go 1.21.5

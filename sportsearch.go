@@ -1,13 +1,13 @@
-package sportsndx
+package sportsearch
 
 import (
-	//"log"
+	"log"
 	"strings"
 )
 
 
 const (
-	APP_NAME            = "sportsndx"
+	APP_NAME            = "sportsearch"
 	APP_VERSION					= "0.1"
 )
 
@@ -199,6 +199,7 @@ func findByName(n string, isLast bool) []PlayerNameNode {
 	if !ok {
 		return nil
 	} else {
+		log.Println(v)
 		return v
 	}
 

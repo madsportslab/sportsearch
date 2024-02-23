@@ -1,6 +1,6 @@
 # design
 
-sportsndx is a golang semantic search indexer and parser, create your own keywords and syntax, and infer the meaning of each search query.
+sportsearch is a golang semantic search indexer and parser, create your own keywords and syntax, and infer the meaning of each search query.
 
 ## semantic parsing
 

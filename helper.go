@@ -1,4 +1,4 @@
-package sportsndx
+package sportsearch
 
 import(
 	"encoding/json"

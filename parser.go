@@ -1,4 +1,4 @@
-package sportsndx
+package sportsearch
 
 import (
 	"log"
@@ -48,7 +48,7 @@ type Classification struct {
 }
 
 
-func CheckPlayer(f string, c *Classification, isFirst bool) {
+func CheckPlayer(f string, c *Classification, isLast bool) {
 
 	var idx map[string][]PlayerNameNode
 
@@ -56,19 +56,21 @@ func CheckPlayer(f string, c *Classification, isFirst bool) {
 		c.Players = []int{}
 	}
 
-	if isFirst {
-		idx = idxPlayerFirst
-	} else {
+	if isLast {
 		idx = idxPlayerLast
+	} else {
+		idx = idxPlayerFirst
 	}
 
-	_, ok := idx[f]
+	fl := strings.ToLower(f)
+
+	_, ok := idx[fl]
 
 	if ok {
 		
 		c.IsPlayer = true
 
-		nodes := findByName(f, false)
+		nodes := findByName(fl, isLast)
 
 		for _, n := range nodes {
 			c.Players = append(c.Players, n.ID)

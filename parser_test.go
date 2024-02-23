@@ -1,4 +1,4 @@
-package sportsndx
+package sportsearch
 
 import (
 	"testing"
@@ -14,7 +14,6 @@ func TestCheckPlayerUniqueFirst(t *testing.T) {
 
 	c := Classification{}
 
-	CheckPlayer("lebron", &c, true)
 	CheckPlayer("lebron", &c, false)
 
 	if !c.IsPlayer || c.Players[0] != 2544 {
@@ -31,7 +30,7 @@ func TestCheckPlayerNonPlayer(t *testing.T) {
 	CheckPlayer("leb", &c, true)
 	CheckPlayer("leb", &c, false)
 
-	if !c.IsPlayer || c.Players[0] != 2544 {
+	if c.IsPlayer {
 		t.Error("Did not correctly classify player")
 	}
 
@@ -43,7 +42,6 @@ func TestCheckPlayerUniqueLast(t *testing.T) {
 	c := Classification{}
 
 	CheckPlayer("doncic", &c, true)
-	CheckPlayer("doncic", &c, false)
 
 	if !c.IsPlayer || c.Players[0] != 1629029 {
 		t.Error("Did not correctly classify player")
@@ -181,8 +179,6 @@ func TestClassifierEmptyString(t *testing.T) {
 
 func TestClassifierCaseSensitivity(t *testing.T) {
 
-	initKeywords()
-
 	c := Classifier("lebron James")
 
 	if c == nil {
@@ -193,8 +189,6 @@ func TestClassifierCaseSensitivity(t *testing.T) {
 
 
 func TestClassifierTeamFull(t *testing.T) {
-
-	initKeywords()
 
 	c := Classifier("boston celtics")
 
@@ -211,8 +205,6 @@ func TestClassifierTeamFull(t *testing.T) {
 
 func TestClassifierTeamCity(t *testing.T) {
 
-	initKeywords()
-
 	c := Classifier("boston")
 
 	if len(c) != 1 {
@@ -227,8 +219,6 @@ func TestClassifierTeamCity(t *testing.T) {
 
 
 func TestClassifierTeamName(t *testing.T) {
-
-	initKeywords()
 
 	c := Classifier("celtics")
 
@@ -245,8 +235,6 @@ func TestClassifierTeamName(t *testing.T) {
 
 func TestClassifierTeamAbv(t *testing.T) {
 
-	initKeywords()
-
 	c := Classifier("bos")
 
 	if len(c) != 1 {
@@ -261,8 +249,6 @@ func TestClassifierTeamAbv(t *testing.T) {
 
 
 func TestClassifierTeamBadAbv(t *testing.T) {
-
-	initKeywords()
 
 	c := Classifier("bo")
 
