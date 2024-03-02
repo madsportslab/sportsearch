@@ -254,10 +254,8 @@ func initReservedIndexes() {
 } // initReservedIndexes
 
 
-func initKeywords() {
-
+func InitMaps() {
 	initTeamIndexes()
 	initPlayerIndexes()
 	initReservedIndexes()
-
-} // initKeywords
+} // InitMaps

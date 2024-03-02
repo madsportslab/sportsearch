@@ -48,6 +48,10 @@ type Classification struct {
 }
 
 
+type PageSummary struct {
+  
+}
+
 func CheckPlayer(f string, c *Classification, isLast bool) {
 
 	var idx map[string][]PlayerNameNode
@@ -139,8 +143,6 @@ func Classifier(q string) []Classification {
 
 		lf := strings.ToLower(f)
 
-		CheckKeyword(lf)
-
 		CheckPlayer(lf, &c, true)
 		CheckPlayer(lf, &c, false)
 		
@@ -165,3 +167,8 @@ func Classifier(q string) []Classification {
 	return ret
 
 } // Classifier
+
+
+func search() []PageSummary {
+
+} // search
