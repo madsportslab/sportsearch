@@ -170,5 +170,5 @@ func Classifier(q string) []Classification {
 
 
 func search() []PageSummary {
-
+  return nil
 } // search
